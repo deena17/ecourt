@@ -18,9 +18,9 @@
 </style>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <a href="{% url 'case_list' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+        <!-- <a href="{% url 'listed-today' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a> -->
         <div class="text-center">
-            <p>IN THE COURT OF ADDITIONAL SPECIAL JUDGE (XIV ADDL JUDGE - CBI)<br>
+            <p>IN THE COURT OF: {{ case.desig_code.desgname | upper }}<br>
                 <span class="text-primary text-center"><strong>{{ case.regcase_type.type_name }}/{{ case.reg_no }}/{{ case.reg_year }}  -  {{ case.cino }}</strong></span>
             </p>
             <p style="font-weight:bold">{{ case.pet_name }} <br>

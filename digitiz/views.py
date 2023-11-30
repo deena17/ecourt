@@ -27,8 +27,9 @@ def list_index(request):
             case_number = form.cleaned_data['case_number']
             case_year = form.cleaned_data['case_year']
             data = CivilPending.objects.using('chnccc').filter(regcase_type=case_type).filter(reg_no=case_number).filter(reg_year=case_year).first()
+            print(data.case_no)
             if data:
-                context['documents'] = IndexRegister.objects.using('chnccc').filter(display='Y').filter(caseno=data.case_no).order_by('-paperdate')
+                context['documents'] = IndexRegister.objects.using('chnccc').filter(display='Y').filter(caseno='232100003362016').order_by('-paperdate')
     return render(request, "digitiz/list_index.html", context)
 
 

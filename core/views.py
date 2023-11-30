@@ -1,7 +1,7 @@
 from django.db import connections
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from core.models import CivilPending, DailyProceeding
+from core.models import CivilPending, DailyProceeding, CaseTypePending
 
 
 def case_listed_today():
@@ -62,8 +62,8 @@ def undated_cases():
         return data[0][2]
 
 
-# @login_required
-def index(request):
+@login_required
+def dasboard(request):
     context = {
         'listed_today': case_listed_today(),
         'registered_today': registered_today(),
@@ -72,12 +72,12 @@ def index(request):
         'unregistered_groupby': unregistered_groupby(),
         'undated_cases': undated_cases()
     }
-    return render(request, "core/index.html", context)
+    return render(request, "core/dashboard.html", context)
 
 
 def case_list(request):
     context = {
-        'cases' : CivilPending.objects.using('chnccc').filter(dt_regis='2022-01-07')
+        'cases' : CivilPending.objects.using('chnccc').filter(dt_regis='2022-01-07').order_by('regcase_type')
     }
     return render(request, "core/case_list.html", context)
 

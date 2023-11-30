@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% load customtags %}
 {% load static %}
 
 {% block title %} Documents {% endblock %}
@@ -41,35 +40,47 @@
         {% if search %}
         {% if documents %}
         <div class="row mt-3">
-            <div class="col-md-3">
-                <div class="list-group">
-                    {% for d in documents %}
-                    <a href="#" data-id='{{d.cino}}{{d.srno}}' class="list-group-item">{{ d.description.docu_name }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="col-md-9 p-1" style="border:1px solid gray">
-                <object data="" type="application/pdf" width="100%" height="700" id="pdf-viewer">
-                    
-                </object>  
+            <div class="col-md-8 offset-md-2">
+                <table class="table table-bordered table-striped">
+                    <thead class="bg-secondary">
+                        <tr>
+                            <th>S. No.</th>
+                            <th>Date</th>
+                            <th>Document Name</th>
+                            <th width="180">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in documents %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ d.paperdate | date:"d-m-Y" }}</td>
+                            <td><a href="">{{ d.description.docu_name }}</a></td>
+                            <td>
+                                <a href="#" class="btn btn-info btn-sm">
+                                    <i class="fa fa-pencil-alt mr-2"></i>Edit
+                                </a>
+                                <a href="#" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash mr-2"></i>Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         {% else %}
         <p class="text-danger text-center mt-3"><strong>No documents found.</strong></p>
         {% endif %}
+        <div class="row">
+            <div class="col-md-2 offset-md-5 mt-2">
+                <a href="{% url 'add-document' %}" class="btn btn-success btn-block">
+                    <i class="fa fa-upload mr-2"></i>Upload </a>
+            </div>
+        </div>
         {% endif %}
     </div>
 </div>
 
-{% endblock %}
-
-{% block scripts %}
-    <script>
-        $(document).ready(function(){
-            $(".list-group-item").click(function(){
-                documentName = $(this).attr("data-id")
-                $("#pdf-viewer").data(documentName+'.pdf')
-            });
-        })
-    </script>
 {% endblock %}

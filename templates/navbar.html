@@ -26,7 +26,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item menu-open">
-            <a href="{% url 'dashboard.index' %}" class="nav-link active">
+            <a href="{% url 'dashboard' %}" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
@@ -41,31 +41,31 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="{% url 'listed-today' %}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Listed cases today</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Registered cases</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Unregistered cases</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Search Case</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Case Order Sheet</p>
                 </a>
@@ -91,13 +91,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'list-document' %}" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Case Documents</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'logout' %}" class="nav-link">
               <i class="nav-icon fa fa-sign-out-alt"></i>
               <p>Log Out</p>
             </a>

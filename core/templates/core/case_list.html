@@ -29,14 +29,14 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>
-                        <a href="{% url 'case_details' c.case_no %}">
+                        <a href="{% url 'case-detail' c.case_no %}">
                             {{ c.regcase_type.type_name }}/{{ c.reg_no }}/{{ c.reg_year }}
                         </a>
                     </td>
                     <td>{{ c.pet_name }} <span class="mx-2 text-danger"><strong>Vs</strong></span>{{ c.res_name }}</td>
                     <td>{{ c.purpose_today.purpose_name }}</td>
                     <td>
-                        <a href="{% url 'case_details' c.case_no %}" class="btn btn-sm btn-info">
+                        <a href="{% url 'case-detail' c.case_no %}" class="btn btn-sm btn-info">
                             Details
                         </a>
                     </td>

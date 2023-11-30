@@ -1,13 +1,17 @@
 from django.urls import path
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+
 from core import views
 
 
 urlpatterns = [
-    path('dashboard/', views.index, name="dashboard.index"),
-    path('case-listed-today/', views.case_list, name="case_list"),
-    path('<str:caseno>/case-details/', views.case_details, name="case_details"),
-    path('<str:caseno>/bdiary/', views.view_bdiary, name="view_bdiary"),
-    path('<str:caseno>/obdiary/', views.view_oldbdiary, name="view_oldbdiary"),
-    path('<str:caseno>/<str:srno>/diary/', views.view_diary, name="view_diary"),
-    path('<str:caseno>/<str:srno>/old-diary/', views.view_odiary, name="view_old_diary")
+    path('', RedirectView.as_view(url=reverse_lazy('dashboard'))),
+    path('dashboard/', views.dasboard, name="dashboard"),
+    path('case-listed-today/', views.case_list, name="listed-today"),
+    path('<str:caseno>/case-details/', views.case_details, name="case-detail"),
+    path('<str:caseno>/bdiary/', views.view_bdiary, name="view-bdiary"),
+    path('<str:caseno>/oldbdiary/', views.view_oldbdiary, name="view-oldbdiary"),
+    path('<str:caseno>/<str:srno>/diary/', views.view_diary, name="view-diary"),
+    path('<str:caseno>/<str:srno>/olddiary/', views.view_odiary, name="view-olddiary")
 ]
