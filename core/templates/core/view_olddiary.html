@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Daily Status
+{% endblock %}
+
+{% block header %}
+    Daily Status
+{% endblock %}
+
+{% block content %}
+<style>
+    .table-no-border th, .table-no-border td{
+        border-top:none;
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+</style>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <a href="{% url 'case_list' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+        <div class="text-center">
+            <p>IN THE COURT OF ADDITIONAL SPECIAL JUDGE (XIV ADDL JUDGE - CBI)<br>
+                <span class="text-primary text-center"><strong>{{ case.regcase_type.type_name }}/{{ case.reg_no }}/{{ case.reg_year }}  -  {{ case.cino }}</strong></span>
+            </p>
+            <p style="font-weight:bold">{{ case.pet_name }} <br>
+                <span class="text-danger">Vs</span> <br>
+                {{ case.res_name }}
+            </p>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <div class="row mt-2 p-1" style="min-height:700px">
+            <div class="col-md-3">
+                <div class="list-group p-1">
+                    <a href="#" class="list-group-item">B Diary</a>
+                    <a href="#" class="list-group-item">Case History</a>
+                    <a href="#" class="list-group-item">Plaint</a>
+                    <a href="#" class="list-group-item">Vakalat</a>
+                    <a href="#" class="list-group-item">Document 1</a>
+                    <a href="#" class="list-group-item">Docuemnt 2</a>
+                    <a href="#" class="list-group-item">Document 3</a>
+                </div>
+            </div>
+            <div class="col-md-9 p-2">
+                <p class="text-center"><strong><u>{{ diary.todays_date | date:"d-m-Y" }}</u></strong></p>
+                <table class="table no-border">
+                    <tr>
+                        <td>Business</td>
+                        <td>:</td>
+                        <td>{{ diary.order_remark }}</td>
+                    </tr>
+                    <tr>
+                        <td>Next&nbsp;Purpose</td>
+                        <td>:</td>
+                        <td>{{ diary.purpose_code.purpose_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Next&nbsp;Date</td>
+                        <td>:</td>
+                        <td>{{ diary.next_date | date:"d-m-Y" }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+  
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

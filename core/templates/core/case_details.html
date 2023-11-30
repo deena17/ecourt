@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Case Details
+{% endblock %}
+
+{% block header %}
+    Case Details
+{% endblock %}
+
+{% block content %}
+<style>
+    .table-no-border th, .table-no-border td{
+        border-top:none;
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+</style>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <a href="{% url 'case_list' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+        <div class="text-center">
+            <span class="text-primary text-center"><strong>{{ case.regcase_type.type_name }}/{{ case.reg_no }}/{{ case.reg_year }}  -  {{ case.cino }}</strong></span>
+            <p style="font-weight:bold">{{ case.pet_name }} <br>
+                <span class="text-danger">Vs</span> <br>
+                {{ case.res_name }}
+            </p>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-no-border">
+                    <tr>
+                        <th>Petitioner&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.pet_adv }}</td>
+                        <th width="1">Respondent&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.res_adv }}</td>
+                    </tr>
+                    <tr>
+                        <th>PreviousHearing:</th>
+                        <td>:</td>
+                        <td colspan="4">{{ previous.todays_date | date:"d-m-Y" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Previous Diary</th>
+                        <td>:</td>
+                        <td colspan="4">{{ previous.order_remark }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-2 p-1" style="min-height:700px">
+            <div class="col-md-3">
+                <div class="list-group p-1">
+                    <a href="{% url 'view_bdiary' case.case_no %}" class="list-group-item">B Diary</a>
+                    <a href="#" class="list-group-item">Case History</a>
+                    <a href="#" class="list-group-item">Plaint</a>
+                    <a href="#" class="list-group-item">Vakalat</a>
+                    <a href="#" class="list-group-item">Document 1</a>
+                    <a href="#" class="list-group-item">Docuemnt 2</a>
+                    <a href="#" class="list-group-item">Document 3</a>
+                </div>
+            </div>
+            <div class="col-md-9 p-1" style="border:1px solid gray">
+                <div id='viewer' style="width:100%;height:900px;margin:0 auto"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    WebViewer({
+      path: '/lib', // path to the PDF.js Express'lib' folder on your server
+      licenseKey: 'Insert free license key here',
+      initialDoc: 'https://pdftron.s3.amazonaws.com/downloads/pl/webviewer-demo.pdf',
+      // initialDoc: '/path/to/my/file.pdf',  // You can also use documents on your server
+    }, document.getElementById('viewer'))
+    .then(instance => {
+      // now you can access APIs through the WebViewer instance
+      const { Core, UI } = instance;
+  
+      // adding an event listener for when a document is loaded
+      Core.documentViewer.addEventListener('documentLoaded', () => {
+        console.log('document loaded');
+      });
+  
+      // adding an event listener for when the page number has changed
+      Core.documentViewer.addEventListener('pageNumberUpdated', (pageNumber) => {
+        console.log(`Page number is: ${pageNumber}`);
+      });
+    });
+  </script>
+  
+{% endblock %}

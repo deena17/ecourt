@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Case Listed Today
+{% endblock %}
+
+{% block header %}
+    Case Listed Today
+{% endblock %}
+
+{% block content %}
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        Case List
+    </div>
+    <div class="card-body p-2">
+        <table class="table table-bordered table-striped">
+            <thead class="bg-secondary">
+                <tr>
+                    <td>S. No.</td>
+                    <td>Case&nbsp;Number</td>
+                    <td>Casue Title</td>
+                    <td>Stage</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cases %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'case_details' c.case_no %}">
+                            {{ c.regcase_type.type_name }}/{{ c.reg_no }}/{{ c.reg_year }}
+                        </a>
+                    </td>
+                    <td>{{ c.pet_name }} <span class="mx-2 text-danger"><strong>Vs</strong></span>{{ c.res_name }}</td>
+                    <td>{{ c.purpose_today.purpose_name }}</td>
+                    <td>
+                        <a href="{% url 'case_details' c.case_no %}" class="btn btn-sm btn-info">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
