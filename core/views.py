@@ -1,65 +1,12 @@
 from django.db import connections
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from core.models import CivilPending, DailyProceeding, CaseTypePending
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from core.models import CivilPending, DailyProceeding, CaseTypePending, HearingStatus, Designation
+from digitiz import forms
 
 
-def case_listed_today():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("select count(*) from civil_t as c inner join hearing_status_t as h using(case_no) where h.hearing_date=%s and  c.court_no=%s", ['2023-11-16', 1])
-        return cursor.fetchone()
-    
-
-def registered_today():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("select count(*) from civil_t as c inner join hearing_status_t as h using(case_no) where h.hearing_date=%s and c.regcase_type is not null and c.reg_no is not null and c.reg_year is not null and c.court_no=%s", ['2023-11-16', 1])
-        return cursor.fetchone()
-    
-
-def unregistered_today():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("select count(*) from civil_t as c inner join hearing_status_t as h using(case_no) where h.hearing_date=%s and c.regcase_type is null and c.reg_no is null and c.reg_year is null and c.court_no=%s", ['2023-11-16', 1])
-        return cursor.fetchone()
-
-def registered_groupby():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("select t.type_name, count(*) from civil_t as c inner join hearing_status_t as h using(case_no) inner join case_type_t as t on t.case_type=c.regcase_type where h.hearing_date=%s and c.regcase_type is not null and c.reg_no is not null and c.reg_year is not null and c.court_no=%s group by t.type_name", ['2023-11-16', 1])
-        data = cursor.fetchall()
-        context = {}
-        for d in data:
-            context[d[0]] = d[1]
-        return context
-
-def unregistered_groupby():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("select t.type_name, count(*) from civil_t as c  inner join case_type_t as t on t.case_type=c.filcase_type where c.date_of_filing=%s and c.court_no=%s group by t.type_name", ['2023-06-30', 0])
-        data = cursor.fetchall()
-        context = {}
-        for d in data:
-            context[d[0]] = d[1]
-        return context
-    
-
-def undated_cases():
-    with connections['chnccc'].cursor() as cursor:
-        cursor.execute("""SELECT COUNT(CASE WHEN t.type_flag = '1' 
-						THEN 1 
-	      					ELSE NULL 
-	   				      END
-         				     ) AS Civil,
-    					COUNT(CASE WHEN t.type_flag = '2'
-	      					THEN 1 
-	      					ELSE NULL 
-	   				      END
-         				     ) AS Criminal,
-    					COUNT(DISTINCT case_no) AS Total	 
-					FROM civil_t As c
-					INNER JOIN desg_t AS d on d.desgcode = c.court_no
-					INNER JOIN case_type_t AS t ON c.regcase_type = t.case_type
-					WHERE c.date_of_decision IS NULL and c.court_no = %s 
-					      and d.display='Y' and c.date_next_list <= NOW() - '1 day'::INTERVAL""", [1])
-        data = cursor.fetchall()
-        return data[0][2]
+from core.utils import *
 
 
 @login_required
@@ -70,16 +17,47 @@ def dasboard(request):
         'unregistered_today': unregistered_today(),
         'registered_groupby': registered_groupby(),
         'unregistered_groupby': unregistered_groupby(),
-        'undated_cases': undated_cases()
+        'undated_cases': undated_cases(),
+        'area': case_count(),
+        'area_type': case_count_type()
     }
     return render(request, "core/dashboard.html", context)
 
 
 def case_list(request):
+    case_list = HearingStatus.objects.using('chnccc').filter(hearing_date='2023-11-16').filter(court_no=1).filter(cino__regcase_type__isnull=False).order_by('cino__purpose_today__purpose_name')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(case_list, 20)
+    try:
+        cases = paginator.page(page)
+    except PageNotAnInteger:
+        cases = paginator.page(1)
+    except EmptyPage:
+        cases = paginator.page(paginator.num_pages)
     context = {
-        'cases' : CivilPending.objects.using('chnccc').filter(dt_regis='2022-01-07').order_by('regcase_type')
+        'cases' : cases
+    }
+    context = {
+        'cases' : cases
     }
     return render(request, "core/case_list.html", context)
+
+
+def undated_list(request):
+    case_list = CivilPending.objects.using('chnccc').filter(date_of_decision__isnull=True).filter(court_no=1).filter(date_next_list__lte='2023-12-03')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(case_list, 20)
+    try:
+        cases = paginator.page(page)
+    except PageNotAnInteger:
+        cases = paginator.page(1)
+    except EmptyPage:
+        cases = paginator.page(paginator.num_pages)
+    context = {
+        'cases' : cases
+    }
+    return render(request, "core/undated_list.html", context)
+
 
 
 def case_details(request, caseno):
@@ -118,7 +96,7 @@ def view_diary(request, caseno, srno):
         'previous' : DailyProceeding.objects.using('chnccc').filter(case_no=caseno).order_by('-todays_date').filter(todays_date__isnull=False).first(),      
         'diary': DailyProceeding.objects.using('chnccc').filter(case_no=caseno).filter(srno=srno).first()
     }
-    return render(request, "core/view_diary.html", context)
+    return render(request, "core/view_olddiary.html", context)
 
 
 def view_odiary(request, caseno, srno):
@@ -127,3 +105,25 @@ def view_odiary(request, caseno, srno):
         'diary': DailyProceeding.objects.using('chnccc').filter(case_no=caseno).filter(srno=srno).first()
     }
     return render(request, "core/view_olddiary.html", context)
+
+
+def order_sheet(request):
+    context = {
+        'form': forms.IndexSearchForm(),
+    }
+    if request.method == 'POST':
+        # initial = {
+        #     'case_type' : request.POST.get('case_type'),
+        #     'case_number': request.POST.get('case_number'),
+        #     'case_year': request.POST.get('case_year')
+        # }
+        context['search'] = True
+        form = forms.IndexSearchForm(request.POST)
+        if form.is_valid():
+            case_type = form.cleaned_data['case_type']
+            case_number = form.cleaned_data['case_number']
+            case_year = form.cleaned_data['case_year']
+            context['case'] = CivilPending.objects.using('chnccc').filter(regcase_type=case_type).filter(reg_no=case_number).filter(reg_year=case_year).first()
+            # context['designation'] = Designation.objects.using('chnncc').filter(courtno=1).first()
+
+    return render(request, "core/order_sheet.html", context)

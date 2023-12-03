@@ -68,7 +68,7 @@
                 <div class="timeline">
                     {%  for d in diaries %}
                     <div class="time-label">
-                        <span class="bg-olive">{{ d.todays_date }}</span>
+                        <span class="bg-olive"><a href="{% url 'view-diary' d.case_no.case_no d.srno %}">{{ d.todays_date }}</a></span>
                     </div>
                     <div>
                         <i class="fas fa-file-alt bg-dark"></i>

@@ -1,11 +1,16 @@
 from django import forms
+from django_select2.forms import Select2Widget
+
 from core.models import CaseTypePending, DocumentType
+
+
 
 class IndexSearchForm(forms.Form):
 
     case_type   = forms.ModelChoiceField(
                         label='',
-                        queryset=CaseTypePending.objects.using('chnccc').filter(display='Y').order_by('type_name'))
+                        queryset=CaseTypePending.objects.using('chnccc').filter(display='Y').order_by('type_name'),
+                        widget=forms.Select(attrs={'class': 'select2 select2-danger'}))
     case_number = forms.CharField(
                         label='',
                         widget=forms.TextInput(attrs={'placeholder' : "Case Number"})
@@ -19,6 +24,7 @@ class IndexSearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(IndexSearchForm, self).__init__(*args, **kwargs)
         self.fields['case_type'].empty_label = "    Select casetype"
+        # self.fields['case_type'].
 
 
 

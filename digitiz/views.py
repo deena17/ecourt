@@ -20,6 +20,11 @@ def list_index(request):
         'casetypes' : CaseTypePending.objects.using('chnccc').filter(display='Y').order_by('type_name'),
     }
     if request.method == 'POST':
+        # initial = {
+        #     'case_type' : request.POST.get('case_type'),
+        #     'case_number': request.POST.get('case_number'),
+        #     'case_year': request.POST.get('case_year')
+        # }
         context['search'] = True
         form = IndexSearchForm(request.POST)
         if form.is_valid():
@@ -27,7 +32,6 @@ def list_index(request):
             case_number = form.cleaned_data['case_number']
             case_year = form.cleaned_data['case_year']
             data = CivilPending.objects.using('chnccc').filter(regcase_type=case_type).filter(reg_no=case_number).filter(reg_year=case_year).first()
-            print(data.case_no)
             if data:
                 context['documents'] = IndexRegister.objects.using('chnccc').filter(display='Y').filter(caseno='232100003362016').order_by('-paperdate')
     return render(request, "digitiz/list_index.html", context)

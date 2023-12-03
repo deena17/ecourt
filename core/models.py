@@ -81,6 +81,28 @@ class Designation(models.Model):
         db_table = 'desg_t'
 
 
+class JudgeName(models.Model):
+    judge_code = models.SmallIntegerField(primary_key=True)
+    judge_name = models.CharField(max_length=100, blank=True, null=True)
+    ljudge_name = models.CharField(max_length=100, blank=True, null=True)
+    desg_code = models.SmallIntegerField()
+    display = models.TextField()  # This field type is a guess.
+    jocode = models.CharField(blank=True, null=True)
+    state_code = models.CharField(blank=True, null=True)
+    jto_dt = models.DateField(blank=True, null=True)
+    jfrom_dt = models.DateField(blank=True, null=True)
+    judge_priority = models.IntegerField(blank=True, null=True)
+    short_judge_name = models.CharField(blank=True, null=True)
+    amd = models.CharField(blank=True, null=True)
+    create_modify = models.DateTimeField(blank=True, null=True)
+    est_code_src = models.CharField()
+    not_jocode = models.TextField()  # This field type is a guess.
+
+    class Meta:
+        managed = False
+        db_table = 'judge_name_t'
+
+
 class CivilPending(models.Model):
     case_no = models.CharField(unique=True, blank=True, null=True)
     pet_name = models.CharField(max_length=100, blank=True, null=True)
@@ -216,7 +238,7 @@ class CivilPending(models.Model):
     c_subject = models.IntegerField(blank=True, null=True)
     cs_subject = models.IntegerField(blank=True, null=True)
     css_subject = models.IntegerField(blank=True, null=True)
-    judge_code = models.CharField(max_length=50, blank=True, null=True)
+    judge_code = models.ForeignKey(JudgeName, blank=True, null=True, to_field="judge_code", db_column="judge_code", on_delete=models.DO_NOTHING)
     desig_code = models.ForeignKey(Designation,blank=True, null=True, to_field="desgcode",db_column="desig_code", on_delete=models.DO_NOTHING)
     pet_gender = models.CharField(blank=True, null=True)
     res_gender = models.CharField(blank=True, null=True)
@@ -342,7 +364,7 @@ class HearingStatus(models.Model):
     hearing_end = models.CharField(blank=True, null=True)
     called_start = models.CharField(blank=True, null=True)
     court_no = models.IntegerField()
-    cino = models.ForeignKey(CivilPending, blank=True, null=True, on_delete=models.DO_NOTHING)
+    cino = models.ForeignKey(CivilPending, blank=True, null=True, to_field="cino", db_column="cino", on_delete=models.DO_NOTHING)
     srno = models.AutoField(primary_key=True)
     cause_list_type = models.IntegerField()
     cause_list_sr_no = models.IntegerField()

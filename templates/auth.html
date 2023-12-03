@@ -17,9 +17,15 @@
   <!-- Custom sytle - Overwrite the theme style -->
   <link rel="stylesheet" href="{% static 'dist/css/custom.style.css' %}">
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 offset-md-4">
+        {% block content %} {% endblock %}
+      </div>
+    </div>
+  </div>
 
-      {% block content %} {% endblock %}
 
 <!-- jQuery -->
 <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>

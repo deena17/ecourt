@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'digitiz',
     'crispy_forms',
+    'django_select2',
  ]
 
 MIDDLEWARE = [

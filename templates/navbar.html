@@ -65,35 +65,41 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'order-sheet' %}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Case Order Sheet</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="{% url 'add-document' %}" class="nav-link">
-              <i class="nav-icon fas fa-upload"></i>
-              <p>Upload Documents</p>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Case Documents
+                <i class="fas fa-angle-left right"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'add-document' %}" class="nav-link">
+                  <i class="nav-icon fas fa-upload"></i>
+                  <p>Upload Document</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listed-today' %}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>View Document</p>
+                </a>
+              </li>
+            </ul>
           </li>
+          
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file"></i>
               <p>Case Diary</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-list"></i>
-              <p>Case List</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'list-document' %}" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Case Documents</p>
             </a>
           </li>
           <li class="nav-item">
