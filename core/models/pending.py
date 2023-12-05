@@ -1,109 +1,7 @@
 from django.db import models
+from core.models.master import CaseType, Purpose, Designation, JudgeName, DocumentType
 
-
-class CaseTypePending(models.Model):
-    case_type = models.SmallIntegerField(primary_key=True)
-    type_name = models.CharField(max_length=50, blank=True, null=True)
-    ltype_name = models.CharField(max_length=50, blank=True, null=True)
-    full_form = models.CharField(max_length=100, blank=True, null=True)
-    lfull_form = models.CharField(max_length=100, blank=True, null=True)
-    type_flag = models.TextField()  # This field type is a guess.
-    filing_no = models.IntegerField()
-    filing_year = models.SmallIntegerField()
-    reg_no = models.IntegerField()
-    reg_year = models.SmallIntegerField()
-    display = models.TextField()  # This field type is a guess.
-    petitioner = models.CharField(max_length=99, blank=True, null=True)
-    respondent = models.CharField(max_length=99, blank=True, null=True)
-    lpetitioner = models.CharField(max_length=99, blank=True, null=True)
-    lrespondent = models.CharField(max_length=99, blank=True, null=True)
-    res_disp = models.SmallIntegerField()
-    case_priority = models.SmallIntegerField()
-    national_code = models.BigIntegerField()
-    macp = models.TextField()  # This field type is a guess.
-    stage_id = models.TextField(blank=True, null=True)
-    matter_type = models.IntegerField(blank=True, null=True)
-    cavreg_no = models.IntegerField()
-    cavreg_year = models.SmallIntegerField()
-    direct_reg = models.TextField()  # This field type is a guess.
-    cavfil_no = models.IntegerField()
-    cavfil_year = models.SmallIntegerField()
-    ia_filing_no = models.IntegerField()
-    ia_filing_year = models.SmallIntegerField()
-    ia_reg_no = models.IntegerField()
-    ia_reg_year = models.SmallIntegerField()
-    tag_courts = models.CharField(max_length=1000, blank=True, null=True)
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-    reasonable_dispose = models.TextField(blank=True, null=True)
-    hideparty = models.CharField()
-
-    def __str__(self):
-        return self.type_name + ' - '+self.full_form
-
-    class Meta:
-        managed = False
-        db_table = 'case_type_t'
-
-
-class PurposePending(models.Model):
-    purpose_code = models.SmallIntegerField(primary_key=True)
-    purpose_name = models.CharField(max_length=100, blank=True, null=True)
-    lpurpose_name = models.CharField(max_length=100, blank=True, null=True)
-    purpose_flag = models.SmallIntegerField(blank=True, null=True)
-    display = models.TextField()  # This field type is a guess.
-    purpose_priority = models.SmallIntegerField()
-    res_disp = models.SmallIntegerField()
-    national_code = models.BigIntegerField()
-    substage_id = models.CharField(max_length=1000, blank=True, null=True)
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-
-    class Meta:
-        managed = False
-        db_table = 'purpose_t'
-
-
-class Designation(models.Model):
-    desgcode = models.BigIntegerField(primary_key=True)
-    desgname = models.CharField(max_length=150, blank=True, null=True)
-    ldesgname = models.CharField(max_length=150, blank=True, null=True)
-    display = models.TextField()  # This field type is a guess.
-    national_code = models.BigIntegerField(blank=True, null=True)
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-
-    class Meta:
-        managed = False
-        db_table = 'desg_t'
-
-
-class JudgeName(models.Model):
-    judge_code = models.SmallIntegerField(primary_key=True)
-    judge_name = models.CharField(max_length=100, blank=True, null=True)
-    ljudge_name = models.CharField(max_length=100, blank=True, null=True)
-    desg_code = models.SmallIntegerField()
-    display = models.TextField()  # This field type is a guess.
-    jocode = models.CharField(blank=True, null=True)
-    state_code = models.CharField(blank=True, null=True)
-    jto_dt = models.DateField(blank=True, null=True)
-    jfrom_dt = models.DateField(blank=True, null=True)
-    judge_priority = models.IntegerField(blank=True, null=True)
-    short_judge_name = models.CharField(blank=True, null=True)
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-    not_jocode = models.TextField()  # This field type is a guess.
-
-    class Meta:
-        managed = False
-        db_table = 'judge_name_t'
-
-
-class CivilPending(models.Model):
+class Civil(models.Model):
     case_no = models.CharField(unique=True, blank=True, null=True)
     pet_name = models.CharField(max_length=100, blank=True, null=True)
     lpet_name = models.CharField(max_length=100, blank=True, null=True)
@@ -201,7 +99,7 @@ class CivilPending(models.Model):
     filcase_type = models.SmallIntegerField(blank=True, null=True)
     fil_no = models.IntegerField(blank=True, null=True)
     fil_year = models.SmallIntegerField(blank=True, null=True)
-    regcase_type = models.ForeignKey(CaseTypePending, blank=True, null=True, to_field="case_type", db_column="regcase_type", on_delete=models.DO_NOTHING)
+    regcase_type = models.ForeignKey(CaseType, blank=True, null=True, to_field="case_type", db_column="regcase_type", on_delete=models.DO_NOTHING)
     reg_no = models.IntegerField(blank=True, null=True)
     reg_year = models.SmallIntegerField(blank=True, null=True)
     goshwara_no_o = models.SmallIntegerField()
@@ -212,7 +110,7 @@ class CivilPending(models.Model):
     pending_ia = models.TextField()  # This field type is a guess.
     ia_next_date = models.DateField(blank=True, null=True)
     time_slot = models.IntegerField(blank=True, null=True)
-    purpose_today = models.ForeignKey(PurposePending, blank=True, null=True, to_field="purpose_code", db_column="purpose_today", on_delete=models.DO_NOTHING)
+    purpose_today = models.ForeignKey(Purpose, blank=True, null=True, to_field="purpose_code", db_column="purpose_today", on_delete=models.DO_NOTHING)
     subpurpose_today = models.SmallIntegerField()
     main_matter_cino = models.CharField(blank=True, null=True)
     split_case_refno = models.CharField(blank=True, null=True)
@@ -283,17 +181,20 @@ class CivilPending(models.Model):
     efiling_type = models.CharField(blank=True, null=True)
     notify_court_id = models.CharField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return self.cino
+
     class Meta:
         managed = False
         db_table = 'civil_t'
 
 
 class DailyProceeding(models.Model):
-    case_no = models.ForeignKey(CivilPending, blank=True, null=True, to_field="case_no", db_column="case_no", on_delete=models.DO_NOTHING)
+    case_no = models.ForeignKey(Civil, blank=True, null=True, to_field="case_no", db_column="case_no", on_delete=models.DO_NOTHING)
     next_date = models.DateField()
     time_slot = models.CharField(max_length=10, blank=True, null=True)
     estimate_time = models.CharField(max_length=10, blank=True, null=True)
-    purpose_code = models.ForeignKey(PurposePending, to_field="purpose_code", db_column="purpose_code", on_delete=models.DO_NOTHING)
+    purpose_code = models.ForeignKey(Purpose, to_field="purpose_code", db_column="purpose_code", on_delete=models.DO_NOTHING)
     subpurpose_id = models.BigIntegerField()
     order_code = models.SmallIntegerField()
     order_remark = models.TextField(blank=True, null=True)
@@ -364,7 +265,7 @@ class HearingStatus(models.Model):
     hearing_end = models.CharField(blank=True, null=True)
     called_start = models.CharField(blank=True, null=True)
     court_no = models.IntegerField()
-    cino = models.ForeignKey(CivilPending, blank=True, null=True, to_field="cino", db_column="cino", on_delete=models.DO_NOTHING)
+    cino = models.ForeignKey(Civil, blank=True, null=True, to_field="cino", db_column="cino", on_delete=models.DO_NOTHING)
     srno = models.AutoField(primary_key=True)
     cause_list_type = models.IntegerField()
     cause_list_sr_no = models.IntegerField()
@@ -375,42 +276,6 @@ class HearingStatus(models.Model):
     class Meta:
         managed = False
         db_table = 'hearing_status_t'
-
-
-class NaturePending(models.Model):
-    case_type_cd = models.SmallIntegerField(primary_key=True)  # The composite primary key (case_type_cd, nature_cd) found, that is not supported. The first column is selected.
-    nature_cd = models.SmallIntegerField()
-    nature_desc = models.CharField(max_length=100, blank=True, null=True)
-    lnature_desc = models.CharField(max_length=100, blank=True, null=True)
-    display = models.TextField()  # This field type is a guess.
-    res_disp = models.SmallIntegerField()
-    national_code = models.BigIntegerField()
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-
-    class Meta:
-        managed = False
-        db_table = 'nature_t'
-        unique_together = (('case_type_cd', 'nature_cd'),)
-
-
-class DocumentType(models.Model):
-    docu_type = models.SmallIntegerField(primary_key=True)
-    docu_name = models.CharField(max_length=100, blank=True, null=True)
-    ldocu_name = models.CharField(max_length=100, blank=True, null=True)
-    order_by_court = models.TextField()  # This field type is a guess.
-    display = models.TextField()  # This field type is a guess.
-    national_code = models.BigIntegerField()
-    judgedecree = models.IntegerField()
-    amd = models.CharField(blank=True, null=True)
-    create_modify = models.DateTimeField(blank=True, null=True)
-    est_code_src = models.CharField()
-
-    class Meta:
-        managed = False
-        db_table = 'docu_type_t'
-
 
 
 class IndexRegister(models.Model):

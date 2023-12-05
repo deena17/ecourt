@@ -2,7 +2,7 @@ from django.db import connections
 from django.shortcuts import render
 from django.urls import reverse
 
-from core.models import CaseTypePending, IndexRegister, CivilPending
+from core.models import CaseType, IndexRegister, Civil
 from digitiz.forms import IndexSearchForm, IndexForm
 
 
@@ -17,7 +17,7 @@ def list_index(request):
     context = {
         'form' : IndexSearchForm(),
         'search': False,
-        'casetypes' : CaseTypePending.objects.using('chnccc').filter(display='Y').order_by('type_name'),
+        'casetypes' : CaseType.objects.using('chnccc').filter(display='Y').order_by('type_name'),
     }
     if request.method == 'POST':
         # initial = {
@@ -31,7 +31,7 @@ def list_index(request):
             case_type = form.cleaned_data['case_type']
             case_number = form.cleaned_data['case_number']
             case_year = form.cleaned_data['case_year']
-            data = CivilPending.objects.using('chnccc').filter(regcase_type=case_type).filter(reg_no=case_number).filter(reg_year=case_year).first()
+            data = Civil.objects.using('chnccc').filter(regcase_type=case_type).filter(reg_no=case_number).filter(reg_year=case_year).first()
             if data:
                 context['documents'] = IndexRegister.objects.using('chnccc').filter(display='Y').filter(caseno='232100003362016').order_by('-paperdate')
     return render(request, "digitiz/list_index.html", context)
@@ -41,6 +41,6 @@ def add_documents(request):
     context = {
         'form' : IndexForm(),
         'search': False,
-        'casetypes' : CaseTypePending.objects.using('chnccc').filter(display='Y').order_by('type_name'),
+        'casetypes' : CaseType.objects.using('chnccc').filter(display='Y').order_by('type_name'),
     }
     return render(request, "digitiz/list_index.html", context)

@@ -37,7 +37,7 @@
                         <td>{{ case.pet_adv }}</td>
                         <th width="1">Respondent&nbsp;Advocate</th>
                         <td>:</td>
-                        <td>asdasdas{{ case.res_adv }}</td>
+                        <td>{{ case.res_adv }}</td>
                     </tr>
                     <tr>
                         <th>PreviousHearing:</th>
@@ -64,7 +64,7 @@
                     <a href="#" class="list-group-item">Document 3</a>
                 </div>
             </div>
-            <div class="col-md-9 p-2">
+            <div class="col-md-9 p-3 border">
                 <div class="timeline">
                     {%  for d in diaries %}
                     <div class="time-label">
@@ -84,6 +84,31 @@
                         </div>
                     </div>
                 {% endfor %}
+                </div>
+                <div class="mt-3">
+                    {% if diaries.has_other_pages %}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {% if diaries.has_previous %}
+                            <li class="page-item"></li><a class="page-link" href="?page={{ diaries.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a href="#" class="page-link">Previous</a></li>
+                            {% endif %}
+                            {% for i in diaries.paginator.page_range %}
+                            {% if diaries.number == i %}
+                                <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only"></span></span></a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if diaries.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ diaries.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><span></span><a href="#" class="page-link">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
                 </div>
             </div>
         </div>

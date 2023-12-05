@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 
+from core.models import Court
+
 
 class Establishment(models.Model):
     est_dbname = models.CharField(max_length=100, blank=True, null=True)
@@ -21,8 +23,28 @@ class Establishment(models.Model):
         db_table = 'establishment'
 
 
+class Users(models.Model):
+    username = models.CharField(max_length=100, blank=True, null=True)
+    mobile = models.CharField(blank=True, null=True, max_length=100)
+    full_name = models.CharField(max_length=150, blank=True, null=True)
+    dt_of_creation = models.DateField(blank=True, null=True)
+    email = models.CharField(blank=True, null=True, max_length=100)
+    uid = models.BigIntegerField(blank=True, null=True)
+    ip = models.CharField(max_length=50, blank=True, null=True)
+    sessionuser = models.CharField(max_length=100, blank=True, null=True)
+    mycolor = models.SmallIntegerField(blank=True, null=True)
+    user_password = models.CharField(max_length=100, blank=True, null=True)
+    userid = models.SmallIntegerField(primary_key=True)
+    display = models.CharField(max_length=1)
+    dashboard_flag = models.CharField(blank=True, null=True, max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = 'users'
+
+
 class IdRoleEst(models.Model):
-    establishmentid = models.CharField(max_length=10)
+    establishmentid = models.ForeignKey(Establishment, max_length=10, to_field="est_code", db_column="establishmentid", on_delete=models.DO_NOTHING)
     court_id = models.BigIntegerField(blank=True, null=True)
     user_id = models.SmallIntegerField(blank=True, null=True)
     section_id = models.IntegerField(blank=True, null=True)
@@ -65,24 +87,7 @@ class Sessions(models.Model):
         db_table = 'sessions'
 
 
-class Users(models.Model):
-    username = models.CharField(max_length=100, blank=True, null=True)
-    mobile = models.CharField(blank=True, null=True, max_length=100)
-    full_name = models.CharField(max_length=150, blank=True, null=True)
-    dt_of_creation = models.DateField(blank=True, null=True)
-    email = models.CharField(blank=True, null=True, max_length=100)
-    uid = models.BigIntegerField(blank=True, null=True)
-    ip = models.CharField(max_length=50, blank=True, null=True)
-    sessionuser = models.CharField(max_length=100, blank=True, null=True)
-    mycolor = models.SmallIntegerField(blank=True, null=True)
-    user_password = models.CharField(max_length=100, blank=True, null=True)
-    userid = models.SmallIntegerField(primary_key=True)
-    display = models.CharField(max_length=1)
-    dashboard_flag = models.CharField(blank=True, null=True, max_length=10)
 
-    class Meta:
-        managed = False
-        db_table = 'users'
 
 
 
