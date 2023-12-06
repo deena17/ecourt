@@ -181,12 +181,16 @@ class Civil(models.Model):
     efiling_type = models.CharField(blank=True, null=True)
     notify_court_id = models.CharField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
-        return self.cino
-
     class Meta:
         managed = False
         db_table = 'civil_t'
+
+    def __str__(self):
+        return f"{self.cino}"
+    
+    def get_obsolute_url(self):
+        from django.urls import reverse
+        return reverse("case-detail", kwargs={"caseno": self.case_no})
 
 
 class DailyProceeding(models.Model):
@@ -256,6 +260,13 @@ class DailyProceeding(models.Model):
         managed = False
         db_table = 'daily_proc'
         unique_together = (('cino', 'srno'),)
+
+    def __str__(self):
+        return f"{self.cino}"
+    
+    def get_obsolute_url(self):
+        from django.urls import reverse
+        return reverse("view-diary", kwargs={"caseno":self.case_no.case_no, "srno": self.srno})
         
 
 class HearingStatus(models.Model):

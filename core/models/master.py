@@ -39,12 +39,12 @@ class CaseType(models.Model):
     reasonable_dispose = models.TextField(blank=True, null=True)
     hideparty = models.CharField()
 
-    def __str__(self):
-        return self.type_name + ' - '+self.full_form
-
     class Meta:
         managed = False
         db_table = 'case_type_t'
+
+    def __str__(self):
+        return f"{self.type_name} - {self.full_form}"
 
 
 class Purpose(models.Model):
@@ -61,12 +61,12 @@ class Purpose(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.purpose_name
-
     class Meta:
         managed = False
         db_table = 'purpose_t'
+
+    def __str__(self):
+        return f"{self.purpose_name}"
 
 
 class Designation(models.Model):
@@ -79,13 +79,13 @@ class Designation(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.desgname
-    
     class Meta:
         managed = False
         db_table = 'desg_t'
 
+    def __str__(self):
+        return f"{self.desgname}"
+    
 
 class JudgeName(models.Model):
     judge_code = models.SmallIntegerField(primary_key=True)
@@ -104,12 +104,12 @@ class JudgeName(models.Model):
     est_code_src = models.CharField()
     not_jocode = models.TextField()  # This field type is a guess.
 
-    def __str__(self):
-        return self.judge_name
-
     class Meta:
         managed = False
         db_table = 'judge_name_t'
+
+    def __str__(self):
+        return f"{self.judge_name}"
 
 
 class Court(models.Model):
@@ -132,12 +132,12 @@ class Court(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.court_no
-
     class Meta:
         managed = False
         db_table = 'court_t'
+
+    def __str__(self):
+        return f"{self.court_no}"
 
 
 class Nature(models.Model):
@@ -152,13 +152,13 @@ class Nature(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.nature_desc
-
     class Meta:
         managed = False
         db_table = 'nature_t'
         unique_together = (('case_type_cd', 'nature_cd'),)
+
+    def __str__(self):
+        return f"{self.nature_desc}"
 
 
 class DocumentType(models.Model):
@@ -173,12 +173,12 @@ class DocumentType(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.docu_name
-
     class Meta:
         managed = False
         db_table = 'docu_type_t'
+    
+    def __str__(self):
+        return f"{self.docu_name}"
 
 
 class Act(models.Model):
@@ -193,13 +193,12 @@ class Act(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-
-    def __str__(self):
-        return self.actname
-
     class Meta:
         managed = False
         db_table = 'act_t'
+
+    def __str__(self):
+        return f"{self.actname}"
 
 
 class Actsection(models.Model):
@@ -216,13 +215,12 @@ class Actsection(models.Model):
     amd = models.CharField(blank=True, null=True)
     create_modify = models.DateTimeField(blank=True, null=True)
 
-
-    def __str__(self):
-        return self.act_section
-
     class Meta:
         managed = False
         db_table = 'actsection_t'
+
+    def __str__(self):
+        return f"{self.act_section}"
 
 
 class Advocate(models.Model):
@@ -274,9 +272,9 @@ class Advocate(models.Model):
     create_modify = models.DateTimeField(blank=True, null=True)
     est_code_src = models.CharField()
 
-    def __str__(self):
-        return self.adv_name
-
     class Meta:
         managed = False
         db_table = 'advocate_t'
+
+    def __str__(self):
+        return f"{self.adv_name}"
