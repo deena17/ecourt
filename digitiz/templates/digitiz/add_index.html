@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load customtags %}
+{% load static %}
+
+{% block title %} Documents {% endblock %}
+
+{% block header %} Documents {% endblock %}
+
+{% block content %}
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        Documents
+    </div>
+    <div class="card-body" style="min-height:600px">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 offset-md-2">
+                    <div class="form-group">
+                        {{ search_form.case_type | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {{ search_form.case_number | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {{ search_form.case_year | as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 offset-md-5 text-center">
+                    <input type="submit" class="btn btn-info btn-block" value="Search">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-8 offset-md-2">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+        {% if submitted %}
+        <form method="post">
+            {% csrf_token %}
+           <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ register_form.description | as_crispy_field }} 
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {{ register_form.serial_number | as_crispy_field }} 
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {{ register_form.document_date | as_crispy_field }} 
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ register_form.document | as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-success" value="Submit">
+                        </div>
+                    </div>
+                </div>
+           </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
