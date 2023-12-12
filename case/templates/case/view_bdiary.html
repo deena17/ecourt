@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    B Diary
+{% endblock %}
+
+{% block header %}
+    B Diary
+{% endblock %}
+
+{% block content %}
+<style>
+    .table-no-border th, .table-no-border td{
+        border-top:none;
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+</style>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        B Diary
+        <a href="{% url 'listed-today' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+    </div>
+    <div class="card-body p-2">
+        <div class="card">
+            <div class="card-header text-center">            
+                <span style="font-weight:bold">{{ case.pet_name }} 
+                    <span class="text-danger mx-2">Vs</span> 
+                    {{ case.res_name }}
+                </span>
+            </div>
+            <div class="card-body p-3">
+                <div class="text-center py-2">
+                    <span class="text-primary"><strong>{{ case.regcase_type.type_name }}/{{ case.reg_no }}/{{ case.reg_year }}  -  {{ case.cino }}</strong></span>
+                </div>
+                <table class="table no-border">
+                    <tr>
+                        <td>Filing Number</td>
+                        <td>:</td>
+                        <td>{{ case.fil_no }}/{{ case.fil_year }}</td>
+                        <td>Filing Date</td>
+                        <td>:</td>
+                        <td>{{ case.date_of_filing | date:"d-m-Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td>Registration Number</td>
+                        <td>:</td>
+                        <td>{{ case.reg_no }}/{{ case.reg_year }}</td>
+                        <td>Date of Registration</td>
+                        <td>:</td>
+                        <td>{{ case.dt_regis | date:"d-m-Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td>First Hearing Date</td>
+                        <td>:</td>
+                        <td>{{ case.date_first_list | date:"d-m-Y" }}</td>
+                        <td>Next Hearing Date</td>
+                        <td>:</td>
+                        <td>{{ case.date_next_list | date:"d-m-Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td>State of Case</td>
+                        <td>:</td>
+                        <td>{{ case.purpose_today }}</td>
+                        <td>Court No. and Judge</td>
+                        <td>:</td>
+                        <td>{{ case.court_no }}. {{ case.desig_code.desgname }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-no-border">
+                    <tr>
+                        <th>Petitioner&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.pet_adv }}</td>
+                        <th width="1">Respondent&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.res_adv }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-2 p-1" style="min-height:700px">
+            <div class="col-md-3">
+                <div class="list-group p-1">
+                    <a href="#" class="list-group-item">B Diary</a>
+                    <a href="#" class="list-group-item">Case History</a>
+                    <a href="#" class="list-group-item">Plaint</a>
+                    <a href="#" class="list-group-item">Vakalat</a>
+                    <a href="#" class="list-group-item">Document 1</a>
+                    <a href="#" class="list-group-item">Docuemnt 2</a>
+                    <a href="#" class="list-group-item">Document 3</a>
+                </div>
+            </div>
+            <div class="col-md-9 p-3 border">
+                <div class="timeline">
+                    {%  for d in diaries %}
+                    <div class="time-label">
+                        <span class="bg-olive"><a href="{{ d.get_obsolute_url }}">{{ d.todays_date }}</a></span>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt bg-dark"></i>
+                        <div class="timeline-item">
+                            <span class="time text-secondary" style="font-size:14px;font-weight:bold">
+                                <i class="fas fa-calendar mr-1"></i> Next Date: 
+                                <span class="text-blue ml-2">{{ d.next_date | date:"d-m-Y" }}</span>
+                            </span>
+                            <h3 class="timeline-header">Purpose: <a href="#">{{ d.purpose_code.purpose_name }}</a></h3>
+                            <div class="timeline-body">
+                                {{ d.order_remark }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="mt-3">
+                    {% if diaries.has_other_pages %}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            {% if diaries.has_previous %}
+                            <li class="page-item"></li><a class="page-link" href="?page={{ diaries.previous_page_number }}">Previous</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><a href="#" class="page-link">Previous</a></li>
+                            {% endif %}
+                            {% for i in diaries.paginator.page_range %}
+                            {% if diaries.number == i %}
+                                <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only"></span></span></a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if diaries.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ diaries.next_page_number }}">Next</a></li>
+                            {% else %}
+                            <li class="page-item disabled"><span></span><a href="#" class="page-link">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+  
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

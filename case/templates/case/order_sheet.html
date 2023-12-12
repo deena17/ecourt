@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load customtags %}
+{% load static %}
+
+{% block title %} Case Order Sheet {% endblock %}
+
+{% block header %} Case Order Sheet {% endblock %}
+
+{% block content %}
+<style>
+    .form-control[readonly] {
+        background-color: #f4f4f4;
+        cursor: not-allowed;
+    }
+</style>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        Case Order Sheet
+    </div>
+    <div class="card-body" style="min-height:600px">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 offset-md-2">
+                    <div class="form-group">
+                        {{ form.case_type | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {{ form.case_number | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        {{ form.case_year | as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 offset-md-5 text-center">
+                    <input type="submit" class="btn btn-info btn-block" value="Search">
+                </div>
+            </div>
+        </form>
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-md-6 offset-md-3">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if case %}
+        <div class="container">
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <table class="table table-bordered p-5">
+                        <tr>
+                            <td>CNR Number</td>
+                            <td><input type="text" class="form-control" value="{{ case.cino }}" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Case Number</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <select name="case_type" id="case_type" class="form-control" readonly="readonly">
+                                            <option value="{{ case.regcase_type }}" selected="selected">{{ case.regcase_type.type_name }} - {{ case.regcase_type.full_form }}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="form-control" value="{{ case.reg_no }}" readonly>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="text" class="form-control" value="{{ case.reg_year }}" readonly></td>
+                                    </div>
+                                </div>
+                            </td>    
+                        </tr>
+                        <tr>
+                            <td>Cause Title</td>
+                            <td>
+                                <input type="text" class="form-control" value="{{ case.pet_name }}" style="width:47%!important;float:left" readonly> 
+                                    <span class="text-danger mx-2"><strong>Vs</strong></span>
+                                <input type="text" class="form-control" value="{{ case.res_name }}" style="width:48%!important;float:right" readonly> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>FIR Number</td>
+                            <td><input type="text" class="form-control" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Police Station</td>
+                            <td><input type="text" class="form-control" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Under Section</td>
+                            <td><input type="text" class="form-control" readonly></td>
+                        </tr>
+                        <tr>
+                            <td>Order Remarks</td>
+                            <td>
+                                <textarea name="order_remarks" id="order_remarks" cols="30" rows="2" class="form-control"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="row">
+                                    <div class="col-md-6 pt-5 mt-3">
+                                        <input type="submit" class="btn btn-success" value="Submit">
+                                    </div>
+                                    <div class="col-md-6 text-center mt-4">
+                                        <p>
+                                            <strong>{{ case.judge_code.judge_name }}</strong> <br>
+                                            {{ case.desig_code.desgname }}<br>
+                                            Date: {% now "d-m-Y" %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $(".list-group-item").click(function(){
+                documentName = $(this).attr("data-id")
+                $("#pdf-viewer").data(documentName+'.pdf')
+            });
+        })
+    </script>
+{% endblock %}

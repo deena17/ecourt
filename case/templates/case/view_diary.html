@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    B Diary
+{% endblock %}
+
+{% block header %}
+    B Diary
+{% endblock %}
+
+{% block content %}
+<style>
+    .table-no-border th, .table-no-border td{
+        border-top:none;
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+</style>
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <a href="{% url 'listed-today' %}" class="btn btn-info float-right"><i class="fa fa-arrow-left mr-2"></i>Back</a>
+        <div class="text-center">
+            <span class="text-primary text-center"><strong>{{ case.regcase_type.type_name }}/{{ case.reg_no }}/{{ case.reg_year }}  -  {{ case.cino }}</strong></span>
+            <p style="font-weight:bold">{{ case.pet_name }} <br>
+                <span class="text-danger">Vs</span> <br>
+                {{ case.res_name }}
+            </p>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-no-border">
+                    <tr>
+                        <th>Petitioner&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.pet_adv }}</td>
+                        <th width="1">Respondent&nbsp;Advocate</th>
+                        <td>:</td>
+                        <td>{{ case.res_adv }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-2 p-1" style="min-height:700px">
+            <div class="col-md-3">
+                <div class="list-group p-1">
+                    <a href="#" class="list-group-item">B Diary</a>
+                    <a href="#" class="list-group-item">Case History</a>
+                    <a href="#" class="list-group-item">Plaint</a>
+                    <a href="#" class="list-group-item">Vakalat</a>
+                    <a href="#" class="list-group-item">Document 1</a>
+                    <a href="#" class="list-group-item">Docuemnt 2</a>
+                    <a href="#" class="list-group-item">Document 3</a>
+                </div>
+            </div>
+            <div class="col-md-9 p-2">
+                <div class="timeline">
+                    <div class="time-label">
+                        <span class="bg-olive">{{ diary.todays_date }}</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-file-alt bg-dark"></i>
+                        <div class="timeline-item">
+                            <span class="time text-secondary" style="font-size:14px;font-weight:bold">
+                                <i class="fas fa-calendar mr-1"></i> Next Date: 
+                                <span class="text-blue ml-2">{{ diary.next_date | date:"d-m-Y" }}</span>
+                            </span>
+                            <h3 class="timeline-header">Purpose: <a href="#">{{ diary.purpose_code.purpose_name }}</a></h3>
+                            <div class="timeline-body">
+                                {{ diary.order_remark }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+  
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Case Listed Today
+{% endblock %}
+
+{% block header %}
+    Case Listed Today
+{% endblock %}
+
+{% block content %}
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        Case List
+    </div>
+    <div class="card-body p-2">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert {{message.tags}} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <table class="table table-bordered table-striped">
+            <thead class="bg-secondary">
+                <tr>
+                    <td>S. No.</td>
+                    <td>Case&nbsp;Number</td>
+                    <td>Casue Title</td>
+                    <td>Stage</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in cases %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'case-detail' c.case_no %}">
+                            {{ c.cino.regcase_type.type_name }}/{{ c.cino.reg_no }}/{{ c.cino.reg_year }}
+                        </a>
+                    </td>
+                    <td>{{ c.cino.pet_name }} <span class="mx-2 text-danger"><strong>Vs</strong></span>{{ c.cino.res_name }}</td>
+                    <td>{{ c.cino.purpose_today.purpose_name }}</td>
+                    <td>
+                        <a href="{% url 'case-detail' c.case_no %}" class="btn btn-sm btn-info">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        {% if cases.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if cases.has_previous %}
+                <li class="page-item"></li><a class="page-link" href="?page={{ cases.previous_page_number }}">Previous</a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="#" class="page-link">Previous</a></li>
+                {% endif %}
+                {% for i in cases.paginator.page_range %}
+                {% if cases.number == i %}
+                    <li class="page-item active"><a class="page-link" href="#"><span>{{ i }} <span class="sr-only"></span></span></a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if cases.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ cases.next_page_number }}">Next</a></li>
+                {% else %}
+                <li class="page-item disabled"><span></span><a href="#" class="page-link">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

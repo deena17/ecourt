@@ -16,14 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+
 from eauth import views
+from case.views import dasboard
 
 urlpatterns = [
+    path('', RedirectView.as_view(url=reverse_lazy('dashboard'))),
+    path('dashboard/', dasboard, name="dashboard"),
+    path('admin/', admin.site.urls),
     path('accounts/login/', views.login_create, name="login"),
     path('accounts/logout/', views.logout_view, name='logout'),
     path('accounts/change-password', views.change_password, name='change-password'),
-    path('', include('core.urls')),
-    path('admin/', admin.site.urls),
-    path('digitization/', include('digitiz.urls')),
+    path('case/', include('case.urls')),
+    path('filing/', include('filing.urls')),
+    path('registration/', include('registration.urls')),
+    path('digitization', include('digitiz.urls')),
     path("select2/", include("django_select2.urls")),
 ]
